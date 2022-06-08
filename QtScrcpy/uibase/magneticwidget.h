@@ -1,8 +1,8 @@
 #ifndef MAGNETICWIDGET_H
 #define MAGNETICWIDGET_H
 
-#include <QWidget>
 #include <QPointer>
+#include <QWidget>
 
 /*
  * a magnetic widget
@@ -14,21 +14,22 @@ class MagneticWidget : public QWidget
     Q_OBJECT
 
 public:
-    enum AdsorbPosition {
-        AP_OUTSIDE_LEFT         = 0x01,     // 吸附外部左边框
-        AP_OUTSIDE_TOP          = 0x02,     // 吸附外部上边框
-        AP_OUTSIDE_RIGHT        = 0x04,     // 吸附外部右边框
-        AP_OUTSIDE_BOTTOM       = 0x08,     // 吸附外部下边框
-        AP_INSIDE_LEFT          = 0x10,     // 吸附内部左边框
-        AP_INSIDE_TOP           = 0x20,     // 吸附内部上边框
-        AP_INSIDE_RIGHT         = 0x40,     // 吸附内部右边框
-        AP_INSIDE_BOTTOM        = 0x80,     // 吸附内部下边框
-        AP_ALL                  = 0xFF,     // 全吸附
+    enum AdsorbPosition
+    {
+        AP_OUTSIDE_LEFT = 0x01,   // 吸附外部左边框
+        AP_OUTSIDE_TOP = 0x02,    // 吸附外部上边框
+        AP_OUTSIDE_RIGHT = 0x04,  // 吸附外部右边框
+        AP_OUTSIDE_BOTTOM = 0x08, // 吸附外部下边框
+        AP_INSIDE_LEFT = 0x10,    // 吸附内部左边框
+        AP_INSIDE_TOP = 0x20,     // 吸附内部上边框
+        AP_INSIDE_RIGHT = 0x40,   // 吸附内部右边框
+        AP_INSIDE_BOTTOM = 0x80,  // 吸附内部下边框
+        AP_ALL = 0xFF,            // 全吸附
     };
     Q_DECLARE_FLAGS(AdsorbPositions, AdsorbPosition)
 
 public:
-    explicit MagneticWidget(QWidget* adsorbWidget, AdsorbPositions adsorbPos = AP_ALL);
+    explicit MagneticWidget(QWidget *adsorbWidget, AdsorbPositions adsorbPos = AP_ALL);
     ~MagneticWidget();
 
     bool isAdsorbed();
@@ -38,13 +39,16 @@ protected:
     void moveEvent(QMoveEvent *event) override;
 
 private:
-    void getGeometry(QRect& relativeWidgetRect, QRect& targetWidgetRect);
+    void getGeometry(QRect &relativeWidgetRect, QRect &targetWidgetRect);
 
 private:
     AdsorbPositions m_adsorbPos = AP_ALL;
     QPoint m_relativePos;
     bool m_adsorbed = false;
     QPointer<QWidget> m_adsorbWidget;
+    // 单独记录adsorbWidgetSize，因为Widget setGeometry的时候，会先收到Move事件，后收到Resize事件，
+    // 但是收到Move事件时Widget的size()已经是setGeometry指定的size了
+    QSize m_adsorbWidgetSize;
     AdsorbPosition m_curAdsorbPosition;
 };
 

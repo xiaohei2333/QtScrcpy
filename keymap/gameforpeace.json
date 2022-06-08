@@ -5,6 +5,18 @@
 			"x": 0.57,
 			"y": 0.26
 		},
+		"speedRatioX": 3.25,
+		"speedRatioY": 1.25,
+		"smallEyes": {
+			"comment": "小眼睛",
+			"type": "KMT_CLICK",
+			"key": "Key_Alt",
+			"pos": {
+				"x": 0.8,
+				"y": 0.31
+			},
+			"switchMap": false
+		},
 		"speedRatio": 10
 	},
 	"keyMapNodes": [
@@ -43,6 +55,16 @@
 			}
 		},
 		{
+			"comment": "自动跑",
+			"type": "KMT_CLICK",
+			"key": "Key_Equal",
+			"pos": {
+				"x": 0.84,
+				"y": 0.26
+			},
+			"switchMap": false
+		},
+		{
 			"comment": "跳",
 			"type": "KMT_CLICK",
 			"key": "Key_Space",
@@ -73,6 +95,16 @@
 			"switchMap": true
 		},
 		{
+			"comment": "视角",
+			"type": "KMT_CLICK",
+			"key": "Key_V",
+			"pos": {
+				"x": 0.23,
+				"y": 0.95
+			},
+			"switchMap": false
+		},
+		{
 			"comment": "趴",
 			"type": "KMT_CLICK",
 			"key": "Key_Z",
@@ -99,16 +131,6 @@
 			"pos": {
 				"x": 0.795,
 				"y": 0.93
-			},
-			"switchMap": false
-		},
-		{
-			"comment": "小眼睛",
-			"type": "KMT_CLICK",
-			"key": "Key_Alt",
-			"pos": {
-				"x": 0.8,
-				"y": 0.31
 			},
 			"switchMap": false
 		},
@@ -203,14 +225,64 @@
 			"switchMap": false
 		},
 		{
+			"comment": "手枪",
+			"type": "KMT_CLICK",
+			"key": "Key_7",
+			"pos": {
+				"x": 0.63,
+				"y": 0.82
+			},
+			"switchMap": false
+		},
+		{
 			"comment": "车加速",
 			"type": "KMT_CLICK",
 			"key": "Key_Shift",
 			"pos": {
-				"x": 0.82,
+				"x": 0.8,
 				"y": 0.8
 			},
 			"switchMap": false
+		},
+		{
+			"comment": "投掷物菜单",
+			"type": "KMT_CLICK",
+			"key": "Key_F1",
+			"pos": {
+				"x": 0.69,
+				"y": 0.88
+			},
+			"switchMap": true
+		},
+		{
+			"comment": "药物菜单",
+			"type": "KMT_CLICK",
+			"key": "Key_F2",
+			"pos": {
+				"x": 0.31,
+				"y": 0.88
+			},
+			"switchMap": true
+		},
+		{
+			"comment": "消息菜单",
+			"type": "KMT_CLICK",
+			"key": "Key_F3",
+			"pos": {
+				"x": 0.98,
+				"y": 0.34
+			},
+			"switchMap": true
+		},
+		{
+			"comment": "表情菜单",
+			"type": "KMT_CLICK",
+			"key": "Key_F4",
+			"pos": {
+				"x": 0.81,
+				"y": 0.03
+			},
+			"switchMap": true
 		},
 		{
 			"comment": "开关门",

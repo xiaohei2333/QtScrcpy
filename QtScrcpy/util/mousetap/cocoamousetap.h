@@ -1,13 +1,15 @@
 #ifndef COCOAMOUSETAP_H
 #define COCOAMOUSETAP_H
-#include <QThread>
 #include <QSemaphore>
+#include <QThread>
 
 #include "mousetap.h"
 
 struct MouseEventTapData;
 class QWidget;
-class CocoaMouseTap : public MouseTap, public QThread
+class CocoaMouseTap
+    : public MouseTap
+    , public QThread
 {
 public:
     CocoaMouseTap(QObject *parent = Q_NULLPTR);
@@ -15,7 +17,7 @@ public:
 
     void initMouseEventTap() override;
     void quitMouseEventTap() override;
-    void enableMouseEventTap(QWidget* widget, bool enabled) override;
+    void enableMouseEventTap(QRect rc, bool enabled) override;
 
 protected:
     void run() override;

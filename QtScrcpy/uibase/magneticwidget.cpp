@@ -3,19 +3,15 @@
 #include <QStyle>
 
 #include "magneticwidget.h"
-#include "ui_magneticwidget.h"
 
-MagneticWidget::MagneticWidget(QWidget* adsorbWidget, AdsorbPositions adsorbPos)
-    : QWidget(Q_NULLPTR)
-    , m_adsorbPos(adsorbPos)
-    , m_adsorbWidget(adsorbWidget)
+MagneticWidget::MagneticWidget(QWidget *adsorbWidget, AdsorbPositions adsorbPos) : QWidget(Q_NULLPTR), m_adsorbPos(adsorbPos), m_adsorbWidget(adsorbWidget)
 {
     Q_ASSERT(m_adsorbWidget);
     setParent(m_adsorbWidget);
     setWindowFlags(windowFlags() | Qt::Tool);
+    m_adsorbWidgetSize = m_adsorbWidget->size();
 
     m_adsorbWidget->installEventFilter(this);
-
 }
 
 MagneticWidget::~MagneticWidget()
@@ -35,6 +31,10 @@ bool MagneticWidget::eventFilter(QObject *watched, QEvent *event)
     if (watched != m_adsorbWidget || !event) {
         return false;
     }
+    // 始终记录adsorbWidget最新size
+    if (QEvent::Resize == event->type()) {
+        m_adsorbWidgetSize = m_adsorbWidget->size();
+    }
     if (m_adsorbed && QEvent::Move == event->type()) {
         move(m_adsorbWidget->pos() - m_relativePos);
     }
@@ -53,7 +53,7 @@ bool MagneticWidget::eventFilter(QObject *watched, QEvent *event)
             pos.setY(pos.y() - m_relativePos.y());
             break;
         case AP_OUTSIDE_RIGHT:
-            pos.setX(pos.x() + m_adsorbWidget->width());
+            pos.setX(pos.x() + m_adsorbWidgetSize.width());
             pos.setY(pos.y() - m_relativePos.y());
             break;
         case AP_OUTSIDE_TOP:
@@ -111,68 +111,53 @@ void MagneticWidget::moveEvent(QMoveEvent *event)
 
     m_adsorbed = false;
 
-    if (m_adsorbPos & AP_INSIDE_LEFT
-            && parentRect.intersects(targetRect)
-            && qAbs(parentLeft - targetLeft) < adsorbDistance) {
+    if (m_adsorbPos & AP_INSIDE_LEFT && parentRect.intersects(targetRect) && qAbs(parentLeft - targetLeft) < adsorbDistance) {
         finalPosition.setX(parentLeft);
         m_adsorbed |= true;
-        m_curAdsorbPosition =  AP_INSIDE_LEFT;
+        m_curAdsorbPosition = AP_INSIDE_LEFT;
     }
 
-    if (m_adsorbPos & AP_OUTSIDE_RIGHT
-            && parentRect.intersects(targetRect.translated(-adsorbDistance, 0))
-            && qAbs(parentRight - targetLeft) < adsorbDistance) {
+    if (m_adsorbPos & AP_OUTSIDE_RIGHT && parentRect.intersects(targetRect.translated(-adsorbDistance, 0)) && qAbs(parentRight - targetLeft) < adsorbDistance) {
         finalPosition.setX(parentRight);
         m_adsorbed |= true;
-        m_curAdsorbPosition =  AP_OUTSIDE_RIGHT;
+        m_curAdsorbPosition = AP_OUTSIDE_RIGHT;
     }
 
-    if (m_adsorbPos & AP_OUTSIDE_LEFT
-            && parentRect.intersects(targetRect.translated(adsorbDistance, 0))
-            && qAbs(parentLeft - targetRight) < adsorbDistance) {
+    if (m_adsorbPos & AP_OUTSIDE_LEFT && parentRect.intersects(targetRect.translated(adsorbDistance, 0)) && qAbs(parentLeft - targetRight) < adsorbDistance) {
         finalPosition.setX(parentLeft - targetRect.width());
         m_adsorbed |= true;
-        m_curAdsorbPosition =  AP_OUTSIDE_LEFT;
+        m_curAdsorbPosition = AP_OUTSIDE_LEFT;
     }
 
-    if (m_adsorbPos & AP_INSIDE_RIGHT
-            && parentRect.intersects(targetRect)
-            && qAbs(parentRight - targetRight) < adsorbDistance) {
+    if (m_adsorbPos & AP_INSIDE_RIGHT && parentRect.intersects(targetRect) && qAbs(parentRight - targetRight) < adsorbDistance) {
         finalPosition.setX(parentRight - targetRect.width());
         m_adsorbed |= true;
-        m_curAdsorbPosition =  AP_INSIDE_RIGHT;
+        m_curAdsorbPosition = AP_INSIDE_RIGHT;
     }
 
-    if (m_adsorbPos & AP_INSIDE_TOP
-            && parentRect.intersects(targetRect)
-            && qAbs(parentTop - targetTop) < adsorbDistance) {
+    if (m_adsorbPos & AP_INSIDE_TOP && parentRect.intersects(targetRect) && qAbs(parentTop - targetTop) < adsorbDistance) {
         finalPosition.setY(parentTop);
         m_adsorbed |= true;
-        m_curAdsorbPosition =  AP_INSIDE_TOP;
+        m_curAdsorbPosition = AP_INSIDE_TOP;
     }
 
-    if (m_adsorbPos & AP_OUTSIDE_TOP
-            && parentRect.intersects(targetRect.translated(0, adsorbDistance))
-            && qAbs(parentTop - targetBottom) < adsorbDistance) {
+    if (m_adsorbPos & AP_OUTSIDE_TOP && parentRect.intersects(targetRect.translated(0, adsorbDistance)) && qAbs(parentTop - targetBottom) < adsorbDistance) {
         finalPosition.setY(parentTop - targetRect.height());
         m_adsorbed |= true;
-        m_curAdsorbPosition =  AP_OUTSIDE_TOP;
+        m_curAdsorbPosition = AP_OUTSIDE_TOP;
     }
 
-    if (m_adsorbPos & AP_OUTSIDE_BOTTOM
-            && parentRect.intersects(targetRect.translated(0, -adsorbDistance))
-            && qAbs(parentBottom - targetTop) < adsorbDistance) {
+    if (m_adsorbPos & AP_OUTSIDE_BOTTOM && parentRect.intersects(targetRect.translated(0, -adsorbDistance))
+        && qAbs(parentBottom - targetTop) < adsorbDistance) {
         finalPosition.setY(parentBottom);
         m_adsorbed |= true;
-        m_curAdsorbPosition =  AP_OUTSIDE_BOTTOM;
+        m_curAdsorbPosition = AP_OUTSIDE_BOTTOM;
     }
 
-    if (m_adsorbPos & AP_INSIDE_BOTTOM
-            && parentRect.intersects(targetRect)
-            && qAbs(parentBottom - targetBottom) < adsorbDistance) {
+    if (m_adsorbPos & AP_INSIDE_BOTTOM && parentRect.intersects(targetRect) && qAbs(parentBottom - targetBottom) < adsorbDistance) {
         finalPosition.setY(parentBottom - targetRect.height());
         m_adsorbed |= true;
-        m_curAdsorbPosition =  AP_INSIDE_BOTTOM;
+        m_curAdsorbPosition = AP_INSIDE_BOTTOM;
     }
 
     if (m_adsorbed) {
@@ -184,23 +169,11 @@ void MagneticWidget::moveEvent(QMoveEvent *event)
 
 void MagneticWidget::getGeometry(QRect &relativeWidgetRect, QRect &targetWidgetRect)
 {
-    QRect parentRect = m_adsorbWidget->geometry();
-    QRect targetRect = geometry();
+    relativeWidgetRect.setTopLeft(m_adsorbWidget->pos());
+    relativeWidgetRect.setWidth(m_adsorbWidgetSize.width());
+    relativeWidgetRect.setHeight(m_adsorbWidgetSize.height());
 
-    if (!m_adsorbWidget->windowFlags().testFlag(Qt::FramelessWindowHint)) {
-        // title bar height
-        int titleBarHeight = m_adsorbWidget->style()->pixelMetric(QStyle::PM_TitleBarHeight);
-        parentRect.translate(0, -titleBarHeight);
-        parentRect.setHeight(parentRect.height() + titleBarHeight);
-    }
-
-    if (!windowFlags().testFlag(Qt::FramelessWindowHint)) {
-        // title bar height
-        int titleBarHeight = style()->pixelMetric(QStyle::PM_TitleBarHeight);
-        targetRect.translate(0, -titleBarHeight);
-        targetRect.setHeight(targetRect.height() + titleBarHeight);
-    }
-    relativeWidgetRect = parentRect;
-    targetWidgetRect = targetRect;
+    targetWidgetRect.setTopLeft(pos());
+    targetWidgetRect.setWidth(width());
+    targetWidgetRect.setHeight(height());
 }
-
